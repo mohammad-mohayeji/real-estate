@@ -1,0 +1,261 @@
+{
+  "estates": [
+    {
+      "id": 1,
+      "type": "Apartment",
+      "name": "Apartment 1",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet, illoat. Repudiandae ratione impedit delectus consectetur. Aspernaturvero obcaecati placeat ab distinctio unde ipsam molestias atqueratione delectus blanditiis nemo eius dignissimos doloremque quaealiquid maiores id tempore consequatur, quod pariatur saepe.",
+      "image": "https://s6.uupload.ir/files/a2lg_ptw0.png",
+      "country": "United States",
+      "address": "7240C Argyle St. Lawndale, CA 90260",
+      "bedrooms": 3,
+      "bathrooms": 2,
+      "surface": "4200 sq ft",
+      "Balcony": true,
+      "Central Air": true,
+      "year": "2016",
+      "price": 13000,
+      "agent": {
+        "image": "https://s6.uupload.ir/files/agent1_zpfw.png",
+        "name": "Patricia Tullert",
+        "phone": "0123 456 78910"
+      }
+    },
+    {
+      "id": 2,
+      "type": "Apartment",
+      "name": "Apartment 2",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet, illoat. Repudiandae ratione impedit delectus consectetur. Aspernaturvero obcaecati placeat ab distinctio unde ipsam molestias atqueratione delectus blanditiis nemo eius dignissimos doloremque quaealiquid maiores id tempore consequatur, quod pariatur saepe.",
+      "image": "https://s6.uupload.ir/files/a1lg_e2f8.png",
+      "country": "United States",
+      "address": "798 Talbot St. Bridgewater, NJ 08807",
+      "bedrooms": 4,
+      "bathrooms": 2,
+      "surface": "4200 sq ft",
+      "Central Air": true,
+      "Parking": true,
+      "year": "2016",
+      "price": 22000,
+      "agent": {
+        "image": "https://s6.uupload.ir/files/agent2_60e.png",
+        "name": "Patricia Tullert",
+        "phone": "0123 456 78910"
+      }
+    },
+    {
+      "id": 3,
+      "type": "Apartment",
+      "name": "Apartment 3",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet, illoat. Repudiandae ratione impedit delectus consectetur. Aspernaturvero obcaecati placeat ab distinctio unde ipsam molestias atqueratione delectus blanditiis nemo eius dignissimos doloremque quaealiquid maiores id tempore consequatur, quod pariatur saepe.",
+      "image": "https://s6.uupload.ir/files/a4lg_5po.png",
+      "country": "United States",
+      "address": "2 Glen Creek St. Alexandria, VA 22304",
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "surface": "4200 sq ft",
+      "Balcony": true,
+      "Parking": true,
+      "year": "2016",
+      "price": 17000,
+      "agent": {
+        "image": "https://s6.uupload.ir/files/agent5_bfrr.png",
+        "name": "Patricia Tullert",
+        "phone": "0123 456 78910"
+      }
+    },
+    {
+      "id": 4,
+      "type": "Apartment",
+      "name": "Apartment 4",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet, illoat. Repudiandae ratione impedit delectus consectetur. Aspernaturvero obcaecati placeat ab distinctio unde ipsam molestias atqueratione delectus blanditiis nemo eius dignissimos doloremque quaealiquid maiores id tempore consequatur, quod pariatur saepe.",
+      "image": "https://s6.uupload.ir/files/a6lg_u6ab.png",
+      "country": "United States",
+      "address": "7240C Argyle St. Lawndale, CA 90260",
+      "bedrooms": 3,
+      "bathrooms": 3,
+      "surface": "4200 sq ft",
+      "Central Air": true,
+      "Parking": true,
+      "year": "2016",
+      "price": 25000,
+      "agent": {
+        "image": "https://s6.uupload.ir/files/agent1_zpfw.png",
+        "name": "Patricia Tullert",
+        "phone": "0123 456 78910"
+      }
+    },
+    {
+      "id": 5,
+      "type": "Apartment",
+      "name": "Apartment 5",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet, illoat. Repudiandae ratione impedit delectus consectetur. Aspernaturvero obcaecati placeat ab distinctio unde ipsam molestias atqueratione delectus blanditiis nemo eius dignissimos doloremque quaealiquid maiores id tempore consequatur, quod pariatur saepe.",
+      "image": "https://s6.uupload.ir/files/a3lg_ifky.png",
+      "country": "United States",
+      "address": "798 Talbot St. Bridgewater, NJ 08807",
+      "bedrooms": 4,
+      "bathrooms": 2,
+      "surface": "4200 sq ft",
+      "Balcony": true,
+      "Parking": true,
+      "year": "2016",
+      "price": 30000,
+      "agent": {
+        "image": "https://s6.uupload.ir/files/agent2_60e.png",
+        "name": "Daryl Hawker",
+        "phone": "0123 456 78910"
+      }
+    },
+    {
+      "id": 6,
+      "type": "Apartment",
+      "name": "Apartment 6",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet, illoat. Repudiandae ratione impedit delectus consectetur. Aspernaturvero obcaecati placeat ab distinctio unde ipsam molestias atqueratione delectus blanditiis nemo eius dignissimos doloremque quaealiquid maiores id tempore consequatur, quod pariatur saepe.",
+      "image": "https://s6.uupload.ir/files/a5lg_qlvf.png",
+      "country": "United States",
+      "address": "2 Glen Creek St. Alexandria, VA 22304",
+      "bedrooms": 3,
+      "bathrooms": 2,
+      "surface": "4200 sq ft",
+      "Central Air": true,
+      "Parking": true,
+      "year": "2016",
+      "price": 21000,
+      "agent": {
+        "image": "https://s6.uupload.ir/files/agent5_bfrr.png",
+        "name": "Amado Smith",
+        "phone": "0123 456 78910"
+      }
+    },
+    {
+      "id": 7,
+      "type": "House",
+      "name": "House 1",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet, illoat. Repudiandae ratione impedit delectus consectetur. Aspernaturvero obcaecati placeat ab distinctio unde ipsam molestias atqueratione delectus blanditiis nemo eius dignissimos doloremque quaealiquid maiores id tempore consequatur, quod pariatur saepe.",
+      "image": "https://s6.uupload.ir/files/house2lg_xv4x.png",
+      "country": "United States",
+      "address": "84 Woodland St. Cocoa, FL 32927",
+      "bedrooms": 6,
+      "bathrooms": 3,
+      "surface": "4200 sq ft",
+      "Pool": true,
+      "Parking": true,
+      "Central Air": true,
+      "year": "2016",
+      "price": 33000,
+      "agent": {
+        "image": "https://s6.uupload.ir/files/agent4_cp4u.png",
+        "name": "Kaitlyn Gonzalez",
+        "phone": "0123 456 78910"
+      }
+    },
+    {
+      "id": 8,
+      "type": "House",
+      "name": "House 2",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet, illoat. Repudiandae ratione impedit delectus consectetur. Aspernaturvero obcaecati placeat ab distinctio unde ipsam molestias atqueratione delectus blanditiis nemo eius dignissimos doloremque quaealiquid maiores id tempore consequatur, quod pariatur saepe.",
+      "image": "https://s6.uupload.ir/files/house3lg_88x7.png",
+      "country": "United States",
+      "address": "28 Westport Dr. Warminster, PA 18974",
+      "bedrooms": 5,
+      "bathrooms": 3,
+      "surface": "4200 sq ft",
+      "Pool": true,
+      "Parking": true,
+      "Backyard": true,
+      "year": "2015",
+      "price": 38000,
+      "agent": {
+        "image": "https://s6.uupload.ir/files/agent6_cy3x.png",
+        "name": "Grover Robinson",
+        "phone": "0123 456 78910"
+      }
+    },
+    {
+      "id": 9,
+      "type": "House",
+      "name": "House 3",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet, illoat. Repudiandae ratione impedit delectus consectetur. Aspernaturvero obcaecati placeat ab distinctio unde ipsam molestias atqueratione delectus blanditiis nemo eius dignissimos doloremque quaealiquid maiores id tempore consequatur, quod pariatur saepe.",
+      "image": "https://s6.uupload.ir/files/house6lg_deit.png",
+      "country": "United States",
+      "address": "32 Pawnee Street Butte, MT 59701",
+      "bedrooms": 6,
+      "bathrooms": 4,
+      "surface": "6200 sq ft",
+      "Pool": true,
+      "Parking": true,
+      "Balcony": true,
+      "year": "2014",
+      "price": 42000,
+      "agent": {
+        "image": "https://s6.uupload.ir/files/agent12_wf38.png",
+        "name": "Karen Sorensen",
+        "phone": "0123 456 78910"
+      }
+    },
+    {
+      "id": 10,
+      "type": "House",
+      "name": "House 4",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet, illoat. Repudiandae ratione impedit delectus consectetur. Aspernaturvero obcaecati placeat ab distinctio unde ipsam molestias atqueratione delectus blanditiis nemo eius dignissimos doloremque quaealiquid maiores id tempore consequatur, quod pariatur saepe.",
+      "image": "https://s6.uupload.ir/files/house4lg_eqsf.png",
+      "country": "United States",
+      "address": "84 Woodland St. Cocoa, FL 32927",
+      "bedrooms": 5,
+      "bathrooms": 4,
+      "surface": "6200 sq ft",
+      "Pool": true,
+      "Parking": true,
+      "Beach": true,
+      "year": "2014",
+      "price": 49000,
+      "agent": {
+        "image": "https://s6.uupload.ir/files/agent4_cp4u.png",
+        "name": "Karen Sorensen",
+        "phone": "0123 456 78910"
+      }
+    },
+    {
+      "id": 11,
+      "type": "House",
+      "name": "House 5",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet, illoat. Repudiandae ratione impedit delectus consectetur. Aspernaturvero obcaecati placeat ab distinctio unde ipsam molestias atqueratione delectus blanditiis nemo eius dignissimos doloremque quaealiquid maiores id tempore consequatur, quod pariatur saepe.",
+      "image": "https://s6.uupload.ir/files/house12lg_gfhu.png",
+      "country": "United States",
+      "address": "28 Westport Dr. Warminster, PA 18974",
+      "bedrooms": 4,
+      "bathrooms": 4,
+      "surface": "6200 sq ft",
+      "Backyard": true,
+      "Central Air": true,
+      "Parking": true,
+      "year": "2014",
+      "price": 52000,
+      "agent": {
+        "image": "https://s6.uupload.ir/files/agent6_cy3x.png",
+        "name": "Karen Sorensen",
+        "phone": "0123 456 78910"
+      }
+    },
+    {
+      "id": 12,
+      "type": "House",
+      "name": "House 6",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet, illoat. Repudiandae ratione impedit delectus consectetur. Aspernaturvero obcaecati placeat ab distinctio unde ipsam molestias atqueratione delectus blanditiis nemo eius dignissimos doloremque quaealiquid maiores id tempore consequatur, quod pariatur saepe.",
+      "image": "https://s6.uupload.ir/files/house1lg_zyze.png",
+      "country": "United States",
+      "address": "32 Pawnee Street Butte, MT 59701",
+      "bedrooms": 5,
+      "bathrooms": 4,
+      "surface": "6200 sq ft",
+      "Beach": true,
+      "Central Air": true,
+      "year": "2014",
+      "price": 58000,
+      "agent": {
+        "image": "https://s6.uupload.ir/files/agent12_wf38.png",
+        "name": "Karen Sorensen",
+        "phone": "0123 456 78910"
+      }
+    }
+  ]
+}
