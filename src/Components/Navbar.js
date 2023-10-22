@@ -14,7 +14,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [dropDown, setDropDown] = useState(false)
 
-  let dropDownDisplay = !dropDown ? 'hidden' : '';
+  let dropDownDisplay = !dropDown ? 'invisible opacity-0 translate-y-5' : '';
 
   return (
     <nav className="bg-coolgray-900 xl:bg-white col-span-2 xl:col-span-1 xl:row-span-1">
@@ -51,8 +51,8 @@ export default function Navbar() {
               <li>
                 <div onClick={(e)=> setDropDown(!dropDown)} className="relative cursor-pointer">
                   <img src="https://s8.uupload.ir/files/profile_75hk.jpg" alt="" className="rounded-full w-10 h-10"/>
-                  <div className={`${dropDownDisplay} absolute right-0`}>
-                    <ul className="bg-white text-coolgray-800 shadow-2xl rounded-lg min-w-[180px] overflow-hidden text-sm translate-y-2.5">
+                  <div className={`${dropDownDisplay} absolute right-0 translate-y-2.5 transition-all duration-300`}>
+                    <ul className="bg-white text-coolgray-800 shadow-2xl rounded-lg min-w-[180px] overflow-hidden text-sm">
                       <li className="w-full"><Link className="hover:bg-indigo-500 hover:text-coolgray-100 py-2 px-3 block">Account Setting</Link></li>
                       <li className="w-full"><Link className="hover:bg-indigo-500 hover:text-coolgray-100 py-2 px-3 block">Support</Link></li>
                       <li className="w-full"><Link className="hover:bg-indigo-500 hover:text-coolgray-100 py-2 px-3 block">Sign Out</Link></li>
