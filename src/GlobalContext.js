@@ -1,634 +1,176 @@
-import React, { createContext, useEffect, useState } from "react";
+import axios from "axios";
+import React, { createContext, useState } from "react";
 
 export const GlobalContext = createContext();
 export default function GlobalContextProvider({ children }) {
-  const [properties, setProperties] = useState([]);
-  const [propertiesData, setPropertiesData] = useState([]);
-  const [bedroomsCount, setBedroomsCount] = useState("Any");
-  const [bathroomsCount, setBathroomsCount] = useState("Any");
-  const [priceRange, setPriceRange] = useState("Any");
-  const [propertyType, setPropertyType] = useState("Any");
   const [amenities, setAmenities] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [pageCount, setPageCount] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchInputValue, setSearchInputValue] = useState("");
 
-  // return all properties
-  useEffect(() => {
-    const allProperties = properties.map((house) => {
-      return house.type;
-    });
+  const [properties, setProperties] = useState([]);
+  const [filter, setFilter] = useState({});
 
-    // remove duplicates
-    const uniqueProperties = ["Property type (any)", ...new Set(allProperties)];
-
-    // set Countries state
-    setProperties(uniqueProperties);
-  }, []);
-
-  const updateHandler = () => {
-    // set loading (true)
+  const updateHandler = (pageNumber) => {
+    setCurrentPage(pageNumber);
     setLoading(true);
+    const keys = Object.keys(filter);
+    let minPrice, maxPrice;
 
-    // create a function that check if the string includes '(any)'
-    const isDefault = (str) => {
-      return str.split(" ").includes("Any");
-    };
+    // pushing "price" to the last index
+    if (keys.includes("price")) {
+      let priceRange = filter.price;
+      minPrice = priceRange.split(" - ")[0];
+      maxPrice = priceRange.split(" - ")[1];
+      const priceIndex = keys.indexOf("price");
+      keys.splice(priceIndex, 1);
+      keys.push("price");
+    }
 
-    // get first value of number and parse it to number
-    const minPrice = parseInt(priceRange.split(" ")[0]);
+    if (keys.length === 0) {
+      axios
+        .get(`http://localhost:5000/estates?_page=${pageNumber}&_limit=6`)
+        .then((res) => {
+          setProperties(res.data);
+          setLoading(false);
+          setPageCount(Math.ceil(res.headers.get("x-total-count") / 6));
+        });
+    } else if (keys.length === 1) {
+      let key = keys[0];
 
-    // get second value of number (which is the maximum) and parse it to number
-    const maxPrice = parseInt(priceRange.split(" ")[2]);
-
-    const newProperties = propertiesData.filter((property) => {
-      // house price
-      const housePrice = parseInt(property.price);
-
-      // if all values are selected
-      if (
-        property.bedrooms == bedroomsCount &&
-        property.bathrooms == bathroomsCount &&
-        property.type === propertyType &&
-        housePrice >= minPrice &&
-        housePrice <= maxPrice
-      ) {
-        // for(let i = 0 ; i < amenities.length ; i++) {
-        //     return property.hasOwnProperty(amenities[i]);
-        // }
-        if(amenities.length == 1) {
-            return property.hasOwnProperty(amenities[0]);
-        } else if(amenities.length == 2) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1])) {
-                return property;
-            }
-        } else if(amenities.length == 3) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2])) {
-                return property;
-            }
-        }else if(amenities.length == 4) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])) {
-                return property;
-            }
-        }else if(amenities.length == 5) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])&& property.hasOwnProperty(amenities[4])) {
-                return property;
-            }
-        }else if(amenities.length == 6) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3]) && property.hasOwnProperty(amenities[4]) && property.hasOwnProperty(amenities[5])) {
-                return property;
-            }
-        }
+      if (key == "price") {
+        axios
+          .get(
+            `http://localhost:5000/estates?_page=${pageNumber}&_limit=6&price_gte=${minPrice}&price_lte=${maxPrice}`
+          )
+          .then((res) => {
+            setProperties(res.data);
+            setLoading(false);
+            setPageCount(Math.ceil(res.headers.get("x-total-count") / 6));
+          });
+      } else {
+        axios
+          .get(
+            `http://localhost:5000/estates?_page=${pageNumber}&_limit=6&${key}=${filter[key]}`
+          )
+          .then((res) => {
+            setProperties(res.data);
+            setLoading(false);
+            setPageCount(Math.ceil(res.headers.get("x-total-count") / 6));
+          });
       }
+    } else if (keys.length === 2) {
+      let key1 = keys[0];
+      let key2 = keys[1];
 
-      // if all values are default
-      if (isDefault(bedroomsCount) && isDefault(bathroomsCount) && isDefault(priceRange) && isDefault(propertyType) && !amenities.length) {
-        return property;
+      if (key2 == "price") {
+        axios
+          .get(
+            `http://localhost:5000/estates?_page=${pageNumber}&_limit=6&price_gte=${minPrice}&price_lte=${maxPrice}&${key1}=${filter[key1]}`
+          )
+          .then((res) => {
+            setProperties(res.data);
+            setLoading(false);
+            setPageCount(Math.ceil(res.headers.get("x-total-count") / 6));
+          });
+      } else {
+        axios
+          .get(
+            `http://localhost:5000/estates?_page=${pageNumber}&_limit=6&${key1}=${filter[key1]}&${key2}=${filter[key2]}`
+          )
+          .then((res) => {
+            setProperties(res.data);
+            setLoading(false);
+            setPageCount(Math.ceil(res.headers.get("x-total-count") / 6));
+          });
       }
+    } else if (keys.length === 3) {
+      let key1 = keys[0];
+      let key2 = keys[1];
+      let key3 = keys[2];
 
-      // if bedroomsCount is not default
-      if (!isDefault(bedroomsCount) && isDefault(bathroomsCount) && isDefault(priceRange) && isDefault(propertyType) && !amenities.length) {
-        return property.bedrooms == bedroomsCount;
+      if (key3 == "price") {
+        axios
+          .get(
+            `http://localhost:5000/estates?_page=${pageNumber}&_limit=6&price_gte=${minPrice}&price_lte=${maxPrice}&${key1}=${filter[key1]}&${key2}=${filter[key2]}`
+          )
+          .then((res) => {
+            setProperties(res.data);
+            setLoading(false);
+            setPageCount(Math.ceil(res.headers.get("x-total-count") / 6));
+          });
+      } else {
+        axios
+          .get(
+            `http://localhost:5000/estates?_page=${pageNumber}&_limit=6&${key1}=${filter[key1]}&${key2}=${filter[key2]}&${key3}=${filter[key3]}`
+          )
+          .then((res) => {
+            setProperties(res.data);
+            setLoading(false);
+            setPageCount(Math.ceil(res.headers.get("x-total-count") / 6));
+          });
       }
+    } else if (keys.length === 4) {
+      let key1 = keys[0];
+      let key2 = keys[1];
+      let key3 = keys[2];
+      let key4 = keys[3];
 
-      // if bathroomsCount is not default
-      if (!isDefault(bathroomsCount) && isDefault(bedroomsCount) && isDefault(priceRange) && isDefault(propertyType) && !amenities.length) {
-          return property.bathrooms == bathroomsCount;
+      if (key4 == "price") {
+        axios
+          .get(
+            `http://localhost:5000/estates?_page=${pageNumber}&_limit=6&price_gte=${minPrice}&price_lte=${maxPrice}&${key1}=${filter[key1]}&${key2}=${filter[key2]}&${key3}=${filter[key3]}`
+          )
+          .then((res) => {
+            setProperties(res.data);
+            setLoading(false);
+            setPageCount(Math.ceil(res.headers.get("x-total-count") / 6));
+          });
+      } else {
+        axios
+          .get(
+            `http://localhost:5000/estates?_page=${pageNumber}&_limit=6&${key1}=${filter[key1]}&${key2}=${filter[key2]}&${key3}=${filter[key3]}&${key4}=${filter[key4]}`
+          )
+          .then((res) => {
+            setProperties(res.data);
+            setLoading(false);
+            setPageCount(Math.ceil(res.headers.get("x-total-count") / 6));
+          });
       }
+    }
+  };
 
-      // if priceRange is not default
-      if (!isDefault(priceRange) && isDefault(bedroomsCount) && isDefault(bathroomsCount) && isDefault(propertyType) && !amenities.length) {
-        if(property.price >= minPrice && property.price <= maxPrice) {
-            return property;
-        }
-      }
-
-      // if propertyType is not default
-      if (!isDefault(propertyType) && isDefault(bedroomsCount) && isDefault(bathroomsCount) && isDefault(priceRange) && !amenities.length) {
-        return property.type === propertyType;
-      }
-
-
-      // if amenities is not default
-      if (amenities.length && isDefault(propertyType) && isDefault(bedroomsCount) && isDefault(bathroomsCount) && isDefault(priceRange)) {
-        if(amenities.length == 1) {
-            return property.hasOwnProperty(amenities[0]);
-        } else if(amenities.length == 2) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1])) {
-                return property;
-            }
-        } else if(amenities.length == 3) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2])) {
-                return property;
-            }
-        }else if(amenities.length == 4) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])) {
-                return property;
-            }
-        }else if(amenities.length == 5) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])&& property.hasOwnProperty(amenities[4])) {
-                return property;
-            }
-        }else if(amenities.length == 6) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3]) && property.hasOwnProperty(amenities[4]) && property.hasOwnProperty(amenities[5])) {
-                return property;
-            }
-        }
-      }
-
-      // if bedroomsCount & bathroomsCount are not default
-      if (!isDefault(bedroomsCount) && !isDefault(bathroomsCount) && isDefault(priceRange) && isDefault(propertyType) && !amenities.length) {
-        if(property.bedrooms == bedroomsCount && property.bathrooms == bathroomsCount) {
-             return property;
-        }
-      }
-
-      // if bedroomsCount & priceRange are not default
-      if (!isDefault(bedroomsCount) && !isDefault(priceRange) && isDefault(bathroomsCount) && isDefault(propertyType) && !amenities.length) {
-        if(property.bedrooms == bedroomsCount && property.price >= minPrice && property.price <= maxPrice) {
-             return property;
-        }
-      }
-
-      // if bedroomsCount & propertyType are not default
-      if (!isDefault(bedroomsCount) && !isDefault(propertyType) && isDefault(bathroomsCount) && isDefault(priceRange) && !amenities.length) {
-        if(property.bedrooms == bedroomsCount && property.type === propertyType) {
-             return property;
-        }
-      }
-
-      // if bedroomsCount & amenities are not default
-      if (!isDefault(bedroomsCount) && amenities.length && isDefault(bathroomsCount) && isDefault(priceRange) && isDefault(propertyType)) {
-        if(property.bedrooms == bedroomsCount) {
-            if(amenities.length == 1) {
-                return property.hasOwnProperty(amenities[0]);
-            } else if(amenities.length == 2) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1])) {
-                    return property;
-                }
-            } else if(amenities.length == 3) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2])) {
-                    return property;
-                }
-            }else if(amenities.length == 4) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])) {
-                    return property;
-                }
-            }else if(amenities.length == 5) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])&& property.hasOwnProperty(amenities[4])) {
-                    return property;
-                }
-            }else if(amenities.length == 6) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3]) && property.hasOwnProperty(amenities[4]) && property.hasOwnProperty(amenities[5])) {
-                    return property;
-                }
-            }
-        }
-      }
-
-      // if bathroomsCount & priceRange are not default
-      if (!isDefault(bathroomsCount) && !isDefault(priceRange) && isDefault(bedroomsCount)  && isDefault(propertyType) && !amenities.length) {
-        if(property.bathrooms == bathroomsCount && property.price >= minPrice && property.price <= maxPrice) {
-             return property;
-        }
-      }
-
-      // if bathroomsCount & propertyType are not default
-      if (!isDefault(bathroomsCount)  && !isDefault(propertyType) && isDefault(bedroomsCount) && isDefault(priceRange) && !amenities.length) {
-        if(property.bathrooms == bathroomsCount && property.type === propertyType) {
-             return property;
-        }
-      }
-
-      // if bathroomsCount & amenities are not default
-      if (!isDefault(bathroomsCount) && amenities.length && isDefault(propertyType) && isDefault(bedroomsCount) && isDefault(priceRange)) {
-        if(property.bathrooms == bathroomsCount) {
-            if(amenities.length == 1) {
-                return property.hasOwnProperty(amenities[0]);
-            } else if(amenities.length == 2) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1])) {
-                    return property;
-                }
-            } else if(amenities.length == 3) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2])) {
-                    return property;
-                }
-            }else if(amenities.length == 4) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])) {
-                    return property;
-                }
-            }else if(amenities.length == 5) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])&& property.hasOwnProperty(amenities[4])) {
-                    return property;
-                }
-            }else if(amenities.length == 6) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3]) && property.hasOwnProperty(amenities[4]) && property.hasOwnProperty(amenities[5])) {
-                    return property;
-                }
-            }
-        }
-      }
-
-      // if priceRange & propertyType are not default
-      if (!isDefault(priceRange) && !isDefault(propertyType) && isDefault(bedroomsCount) && isDefault(bathroomsCount) && !amenities.length) {
-        if(property.price >= minPrice && property.price <= maxPrice && property.type === propertyType) {
-             return property;
-        }
-      }
-
-      // if priceRange & amenities are not default
-      if (!isDefault(priceRange) && amenities.length && isDefault(bedroomsCount) && isDefault(bathroomsCount) && isDefault(propertyType)) {
-        if(property.price >= minPrice && property.price <= maxPrice) {
-            if(amenities.length == 1) {
-                return property.hasOwnProperty(amenities[0]);
-            } else if(amenities.length == 2) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1])) {
-                    return property;
-                }
-            } else if(amenities.length == 3) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2])) {
-                    return property;
-                }
-            }else if(amenities.length == 4) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])) {
-                    return property;
-                }
-            }else if(amenities.length == 5) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])&& property.hasOwnProperty(amenities[4])) {
-                    return property;
-                }
-            }else if(amenities.length == 6) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3]) && property.hasOwnProperty(amenities[4]) && property.hasOwnProperty(amenities[5])) {
-                    return property;
-                }
-            }
-        }
-      }
-
-      //  if propertyType & amenities are not default
-      if (!isDefault(propertyType) && amenities.length && isDefault(bedroomsCount) && isDefault(bathroomsCount) && isDefault(priceRange)) {
-        if(property.type === propertyType) {
-            if(amenities.length == 1) {
-                return property.hasOwnProperty(amenities[0]);
-            } else if(amenities.length == 2) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1])) {
-                    return property;
-                }
-            } else if(amenities.length == 3) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2])) {
-                    return property;
-                }
-            }else if(amenities.length == 4) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])) {
-                    return property;
-                }
-            }else if(amenities.length == 5) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])&& property.hasOwnProperty(amenities[4])) {
-                    return property;
-                }
-            }else if(amenities.length == 6) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3]) && property.hasOwnProperty(amenities[4]) && property.hasOwnProperty(amenities[5])) {
-                    return property;
-                }
-            }
-        }
-      }
-
-     //  if bedroomsCount, bathroomsCount & priceRange are not default
-     if (!isDefault(bathroomsCount) && !isDefault(priceRange) && !isDefault(bedroomsCount)  && isDefault(propertyType) && !amenities.length) {
-        if(property.bathrooms == bathroomsCount && property.bedrooms == bedroomsCount && property.price >= minPrice && property.price <= maxPrice) {
-             return property;
-        }
-      }
-
-      //  if bedroomsCount, bathroomsCount & propertyType are not default
-      if (!isDefault(bathroomsCount) && isDefault(priceRange) && !isDefault(bedroomsCount)  && !isDefault(propertyType) && !amenities.length) {
-        if(property.bathrooms == bathroomsCount && property.bedrooms == bedroomsCount && property.type === propertyType) {
-             return property;
-        }
-      }
-
-      //  if bedroomsCount, bathroomsCount & amenities are not default
-      if (!isDefault(bathroomsCount) && isDefault(priceRange) && !isDefault(bedroomsCount)  && isDefault(propertyType) && amenities.length) {
-        if(property.bathrooms == bathroomsCount && property.bedrooms == bedroomsCount) {
-            if(amenities.length == 1) {
-                return property.hasOwnProperty(amenities[0]);
-            } else if(amenities.length == 2) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1])) {
-                    return property;
-                }
-            } else if(amenities.length == 3) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2])) {
-                    return property;
-                }
-            }else if(amenities.length == 4) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])) {
-                    return property;
-                }
-            }else if(amenities.length == 5) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])&& property.hasOwnProperty(amenities[4])) {
-                    return property;
-                }
-            }else if(amenities.length == 6) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3]) && property.hasOwnProperty(amenities[4]) && property.hasOwnProperty(amenities[5])) {
-                    return property;
-                }
-            }
-        }
-      }
-
-      //  if bedroomsCount, priceRange & propertyType are not default
-      if (!isDefault(bedroomsCount) && !isDefault(priceRange) && isDefault(bathroomsCount)  && !isDefault(propertyType) && !amenities.length) {
-        if(property.bedrooms == bedroomsCount && property.type === propertyType && property.price >= minPrice && property.price <= maxPrice) {
-             return property;
-        }
-      }
-
-      //  if bedroomsCount, priceRange & amenities are not default
-      if (!isDefault(bedroomsCount) && !isDefault(priceRange) && isDefault(bathroomsCount)  && isDefault(propertyType) && amenities.length) {
-        if(property.bedrooms == bedroomsCount && property.price >= minPrice && property.price <= maxPrice) {
-            if(amenities.length == 1) {
-                return property.hasOwnProperty(amenities[0]);
-            } else if(amenities.length == 2) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1])) {
-                    return property;
-                }
-            } else if(amenities.length == 3) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2])) {
-                    return property;
-                }
-            }else if(amenities.length == 4) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])) {
-                    return property;
-                }
-            }else if(amenities.length == 5) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])&& property.hasOwnProperty(amenities[4])) {
-                    return property;
-                }
-            }else if(amenities.length == 6) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3]) && property.hasOwnProperty(amenities[4]) && property.hasOwnProperty(amenities[5])) {
-                    return property;
-                }
-            }
-        }
-      }
-
-      //  if bedroomsCount, propertyType & amenities are not default
-      if (!isDefault(bedroomsCount) && isDefault(priceRange) && isDefault(bathroomsCount)  && !isDefault(propertyType) && amenities.length) {
-        if(property.bedrooms == bedroomsCount && property.type === propertyType) {
-            if(amenities.length == 1) {
-                return property.hasOwnProperty(amenities[0]);
-            } else if(amenities.length == 2) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1])) {
-                    return property;
-                }
-            } else if(amenities.length == 3) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2])) {
-                    return property;
-                }
-            }else if(amenities.length == 4) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])) {
-                    return property;
-                }
-            }else if(amenities.length == 5) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])&& property.hasOwnProperty(amenities[4])) {
-                    return property;
-                }
-            }else if(amenities.length == 6) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3]) && property.hasOwnProperty(amenities[4]) && property.hasOwnProperty(amenities[5])) {
-                    return property;
-                }
-            }
-        }
-      }
-
-      //  if bathroomsCount, priceRange & propertyType are not default
-      if (isDefault(bedroomsCount) && !isDefault(priceRange) && !isDefault(bathroomsCount)  && !isDefault(propertyType) && !amenities.length) {
-        if(property.bathrooms == bathroomsCount && property.type === propertyType && property.price >= minPrice && property.price <= maxPrice) {
-            return property;
-        }
-      }
-
-      //  if bathroomsCount, priceRange & amenities are not default
-      if (isDefault(bedroomsCount) && !isDefault(priceRange) && !isDefault(bathroomsCount)  && isDefault(propertyType) && amenities.length) {
-        if(property.bathrooms == bathroomsCount && property.price >= minPrice && property.price <= maxPrice) {
-            if(amenities.length == 1) {
-                return property.hasOwnProperty(amenities[0]);
-            } else if(amenities.length == 2) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1])) {
-                    return property;
-                }
-            } else if(amenities.length == 3) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2])) {
-                    return property;
-                }
-            }else if(amenities.length == 4) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])) {
-                    return property;
-                }
-            }else if(amenities.length == 5) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])&& property.hasOwnProperty(amenities[4])) {
-                    return property;
-                }
-            }else if(amenities.length == 6) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3]) && property.hasOwnProperty(amenities[4]) && property.hasOwnProperty(amenities[5])) {
-                    return property;
-                }
-            }
-        }
-      }
-
-      //  if bathroomsCount, propertyType & amenities are not default
-      if (isDefault(bedroomsCount) && isDefault(priceRange) && !isDefault(bathroomsCount)  && !isDefault(propertyType) && amenities.length) {
-        if(property.bathrooms == bathroomsCount && property.type === propertyType) {
-            if(amenities.length == 1) {
-            return property.hasOwnProperty(amenities[0]);
-        } else if(amenities.length == 2) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1])) {
-                return property;
-            }
-        } else if(amenities.length == 3) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2])) {
-                return property;
-            }
-        }else if(amenities.length == 4) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])) {
-                return property;
-            }
-        }else if(amenities.length == 5) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])&& property.hasOwnProperty(amenities[4])) {
-                return property;
-            }
-        }else if(amenities.length == 6) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3]) && property.hasOwnProperty(amenities[4]) && property.hasOwnProperty(amenities[5])) {
-                return property;
-            }
-        }
-        }
-      }
-
-      //  if priceRange, propertyType & amenities are not default
-      if (isDefault(bedroomsCount) && !isDefault(priceRange) && isDefault(bathroomsCount)  && !isDefault(propertyType) && amenities.length) {
-        if(property.type == propertyType && property.price >= minPrice && property.price <= maxPrice) {
-            if(amenities.length == 1) {
-            return property.hasOwnProperty(amenities[0]);
-        } else if(amenities.length == 2) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1])) {
-                return property;
-            }
-        } else if(amenities.length == 3) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2])) {
-                return property;
-            }
-        }else if(amenities.length == 4) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])) {
-                return property;
-            }
-        }else if(amenities.length == 5) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])&& property.hasOwnProperty(amenities[4])) {
-                return property;
-            }
-        }else if(amenities.length == 6) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3]) && property.hasOwnProperty(amenities[4]) && property.hasOwnProperty(amenities[5])) {
-                return property;
-            }
-        }
-        }
-      }
-
-      // if bedroomsCount, bathroomsCount, priceRange, propertyType are not default
-      if (!isDefault(bedroomsCount) && !isDefault(bathroomsCount) && !isDefault(priceRange)  && !isDefault(propertyType) && !amenities.length) {
-        if (property.bedrooms == bedroomsCount && property.bathrooms == bathroomsCount && property.type === propertyType && property.price >= minPrice && property.price <= maxPrice) {
-            return property;
-        }
-      }
-
-      // if bedroomsCount, bathroomsCount, priceRange, amenities are not default
-      if (!isDefault(bedroomsCount) && !isDefault(bathroomsCount) && !isDefault(priceRange)  && isDefault(propertyType) && amenities.length) {
-        if (property.bedrooms == bedroomsCount && property.bathrooms == bathroomsCount && property.price >= minPrice && property.price <= maxPrice) {
-            if(amenities.length == 1) {
-            return property.hasOwnProperty(amenities[0]);
-        } else if(amenities.length == 2) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1])) {
-                return property;
-            }
-        } else if(amenities.length == 3) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2])) {
-                return property;
-            }
-        }else if(amenities.length == 4) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])) {
-                return property;
-            }
-        }else if(amenities.length == 5) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])&& property.hasOwnProperty(amenities[4])) {
-                return property;
-            }
-        }else if(amenities.length == 6) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3]) && property.hasOwnProperty(amenities[4]) && property.hasOwnProperty(amenities[5])) {
-                return property;
-            }
-        }
-        }
-      }
-
-      // if bedroomsCount, bathroomsCount, propertyType, amenities are not default
-      if (!isDefault(bedroomsCount) && !isDefault(bathroomsCount) && isDefault(priceRange)  && !isDefault(propertyType) && amenities.length) {
-        if (property.bedrooms == bedroomsCount && property.bathrooms == bathroomsCount && property.type === propertyType) {
-            if(amenities.length == 1) {
-            return property.hasOwnProperty(amenities[0]);
-        } else if(amenities.length == 2) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1])) {
-                return property;
-            }
-        } else if(amenities.length == 3) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2])) {
-                return property;
-            }
-        }else if(amenities.length == 4) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])) {
-                return property;
-            }
-        }else if(amenities.length == 5) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])&& property.hasOwnProperty(amenities[4])) {
-                return property;
-            }
-        }else if(amenities.length == 6) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3]) && property.hasOwnProperty(amenities[4]) && property.hasOwnProperty(amenities[5])) {
-                return property;
-            }
-        }
-        }
-      }
-
-      // if bedroomsCount, priceRange, propertyType, amenities are not default
-      if (!isDefault(bedroomsCount) && isDefault(bathroomsCount) && !isDefault(priceRange)  && !isDefault(propertyType) && amenities.length) {
-        if (property.bedrooms == bedroomsCount && property.type === propertyType && property.price >= minPrice && property.price <= maxPrice) {
-            if(amenities.length == 1) {
-            return property.hasOwnProperty(amenities[0]);
-        } else if(amenities.length == 2) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1])) {
-                return property;
-            }
-        } else if(amenities.length == 3) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2])) {
-                return property;
-            }
-        }else if(amenities.length == 4) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])) {
-                return property;
-            }
-        }else if(amenities.length == 5) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])&& property.hasOwnProperty(amenities[4])) {
-                return property;
-            }
-        }else if(amenities.length == 6) {
-            if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3]) && property.hasOwnProperty(amenities[4]) && property.hasOwnProperty(amenities[5])) {
-                return property;
-            }
-        }
-        }
-      }
-
-      // if bathroomsCount, priceRange, propertyType, amenities are not default
-      if (isDefault(bedroomsCount) && !isDefault(bathroomsCount) && !isDefault(priceRange)  && !isDefault(propertyType) && amenities.length) {
-        if (property.bathrooms == bathroomsCount && property.type === propertyType && property.price >= minPrice && property.price <= maxPrice) {
-            if(amenities.length == 1) {
-                return property.hasOwnProperty(amenities[0]);
-            } else if(amenities.length == 2) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1])) {
-                    return property;
-                }
-            } else if(amenities.length == 3) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2])) {
-                    return property;
-                }
-            }else if(amenities.length == 4) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])) {
-                    return property;
-                }
-            }else if(amenities.length == 5) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3])&& property.hasOwnProperty(amenities[4])) {
-                    return property;
-                }
-            }else if(amenities.length == 6) {
-                if(property.hasOwnProperty(amenities[0]) && property.hasOwnProperty(amenities[1]) && property.hasOwnProperty(amenities[2]) && property.hasOwnProperty(amenities[3]) && property.hasOwnProperty(amenities[4]) && property.hasOwnProperty(amenities[5])) {
-                    return property;
-                }
-            }
-        }
-      }
-    });
-
-    setTimeout(() => {
-      return (
-        newProperties.length < 1 ? setProperties([]) : setProperties(newProperties),
-        setLoading(false)
-      );
-    }, 1000);
+  const searchHandler = (pageNumber) => {
+    setLoading(true);
+    axios.get(`http://localhost:5000/estates?q=${searchInputValue}&_page=${pageNumber}&_limit=6`).then((res) => {
+        setProperties(res.data);
+        setLoading(false);
+        setPageCount(Math.ceil(res.headers.get("x-total-count") / 6));
+      });
   };
 
   return (
     <GlobalContext.Provider
-      value={{ updateHandler, properties, setProperties, propertiesData, setPropertiesData, bedroomsCount, setBedroomsCount, bathroomsCount, setBathroomsCount, priceRange, setPriceRange, propertyType, setPropertyType, amenities, setAmenities, loading}}>
+      value={{
+        properties,
+        setProperties,
+        updateHandler,
+        filter,
+        setFilter,
+        amenities,
+        searchInputValue,
+        setAmenities,
+        loading,
+        pageCount,
+        setPageCount,
+        currentPage,
+        setCurrentPage,
+        setLoading,
+        setSearchInputValue,
+        searchHandler
+      }}
+    >
       {children}
     </GlobalContext.Provider>
   );

@@ -1,31 +1,33 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { MagnifyingGlassIcon } from "../../node_modules/@heroicons/react/24/solid";
 import Filterbar from "./Filterbar";
+import { GlobalContext } from "../GlobalContext";
+import axios from "axios";
 
 export default function Navbar() {
+  const {searchHandler, searchInputValue,setSearchInputValue} = useContext(GlobalContext)
   const btn = useRef();
+  const [isOpen, setIsOpen] = useState(false);
+  const [dropDown, setDropDown] = useState(false);
+  let dropDownDisplay = !dropDown ? 'invisible opacity-0 translate-y-5' : '';
+  
   const clickHandler = (e) => {
     btn.current.classList.toggle("is-active");
     setIsOpen(!isOpen)
   };
-
-  const [isOpen, setIsOpen] = useState(false);
-  const [dropDown, setDropDown] = useState(false)
-
-  let dropDownDisplay = !dropDown ? 'invisible opacity-0 translate-y-5' : '';
 
   return (
     <nav className="bg-coolgray-900 xl:bg-white col-span-2 xl:col-span-1 xl:row-span-1">
       <div className="xl:container xl:mx-auto 2xl:max-w-screen-xl">
         <div className="flex justify-between items-center p-5">
           <div>
-            <div className="hidden bg-coolgray-300 xl:flex items-center rounded-lg px-4">
-              <span>
-                <MagnifyingGlassIcon className="h-5 w-5 text-coolgray-600" />
-              </span>
-              <input type="text" className="bg-transparent border-none focus:ring-0 placeholder:text-coolgray-600 text-sm" placeholder="Search by keywords"/>
+            <div className="hidden xl:flex items-center">
+              <div className="hidden bg-coolgray-300 xl:flex items-center rounded-lg">
+                <input value={searchInputValue} onChange={(e)=> setSearchInputValue(e.target.value)} type="text" className="bg-transparent border-none focus:ring-0 placeholder:text-coolgray-600 text-sm" placeholder="Search by keywords"/>
+              </div>
+              <button onClick={(e)=> searchHandler(1)} className="bg-indigo-500 text-white ml-1 p-2 rounded-lg"><MagnifyingGlassIcon className="h-5 w-5" /></button>
             </div>
             <div className="xl:hidden">
               <img src="https://s8.uupload.ir/files/logo_9gl4.png" alt="" />
@@ -68,8 +70,8 @@ export default function Navbar() {
             </span>
           </button>
         </div>
-        <div className={`${!isOpen ? 'h-0 hidden invisible' : ''} max-w-[100%] h-auto block visible transition duration-300 sm:hidden`}>
-          <div className="border-b border-coolgray-800">
+        <div className={`${!isOpen ? 'h-0 invisible overflow-hidden' : 'h-[365px] visible'} max-w-[100%] transition-all duration-300 sm:hidden`}>
+          <div className={`${!isOpen ? 'opacity-0 invisible' : 'opacity-100 visible'} border-b border-coolgray-800 transition-all duration-400 delay-100`}>
             <ul className="flex flex-col p-5 gap-y-4">
               <li>
                 <Link className="text-white font-medium">
@@ -84,7 +86,7 @@ export default function Navbar() {
               </li>
             </ul>
           </div>
-          <div>
+          <div className={`${!isOpen ? 'opacity-0 invisible' : 'opacity-100 visible'} transition-all duration-400 delay-100`}>
             <ul className="flex flex-col p-5 gap-y-4">
               <li className="flex items-center gap-x-4 mb-2">
                 <img src="https://s8.uupload.ir/files/profile_75hk.jpg" alt="" className="rounded-full w-12 h-12" />

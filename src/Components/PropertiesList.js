@@ -1,7 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import PropertyCard from "./PropertyCard";
 import axios from "axios";
+import ReactPaginate from "react-paginate";
 
 // import our GlobalContext
 import { GlobalContext } from "../GlobalContext";
@@ -10,15 +11,52 @@ import { GlobalContext } from "../GlobalContext";
 import { ImSpinner2 } from "react-icons/im";
 
 export default function PropertiesList() {
-  const { properties, setProperties, propertiesData, setPropertiesData, loading } =
-    useContext(GlobalContext);
+  const {
+    properties,
+    setProperties,
+    filter,
+    updateHandler,
+    loading,
+    pageCount,
+    setPageCount,
+    currentPage,
+    setCurrentPage,
+    searchInputValue,
+    searchHandler,
+  } = useContext(GlobalContext);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/estates").then((res) => {
-      setProperties(res.data);
-      setPropertiesData(res.data);
-    });
+    if (searchInputValue) {
+      console.log("A");
+      searchHandler(currentPage);
+    } else if (!Object.keys(filter).length && !searchInputValue) {
+      fetchData(currentPage);
+    } else if(Object.keys(filter).length && !searchInputValue) {
+      updateHandler(currentPage);
+    }
   }, []);
+
+  const handlePage = (data) => {
+    const pageNumber = data.selected + 1;
+    setCurrentPage(pageNumber);
+
+    if (searchInputValue) {
+      searchHandler(pageNumber);
+    } else if (!Object.keys(filter).length && !searchInputValue) {
+      fetchData(pageNumber);
+    } else if(Object.keys(filter).length && !searchInputValue) {
+      updateHandler(pageNumber);
+    }
+  };
+
+  const fetchData = (pageNumber) => {
+    axios
+      .get(`http://localhost:5000/estates?_page=${pageNumber}&_limit=6`)
+      .then((res) => {
+        setProperties(res.data);
+        setPageCount(Math.ceil(res.headers.get("x-total-count") / 6));
+      });
+  };
 
   if (loading) {
     return (
@@ -26,8 +64,12 @@ export default function PropertiesList() {
     );
   }
 
-  if(!properties.length) {
-    return <div className="text-center text-3xl text-coolgray-600 mt-56">Sorry, Nothing was found!</div>;
+  if (!properties.length) {
+    return (
+      <div className="text-center text-3xl text-coolgray-600 mt-56">
+        Sorry, Nothing was found!
+      </div>
+    );
   }
 
   return (
@@ -45,10 +87,24 @@ export default function PropertiesList() {
             </Link>
           </span>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-10 py-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-10 py-4 mb-5">
           {properties.map((estate) => (
             <PropertyCard key={estate.id} estate={estate} />
           ))}
+        </div>
+        <div className="pagination-container">
+          <ReactPaginate
+            pageCount={pageCount}
+            containerClassName="pagination"
+            pageClassName="page-item"
+            previousClassName="prev-page"
+            nextClassName="next-page"
+            previousLabel="Prev"
+            activeClassName="active"
+            disabledClassName="disabled"
+            onPageChange={handlePage}
+            forcePage={currentPage - 1}
+          />
         </div>
       </div>
     </div>

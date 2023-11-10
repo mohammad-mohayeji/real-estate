@@ -15,7 +15,7 @@
 
   /* scrollbar Track */
   ::-webkit-scrollbar-track {
-    background: #CBD5E0;
+    background: #cbd5e0;
   }
 
   /* scrollbar Handle */
@@ -26,7 +26,23 @@
 
   /* scrollbar Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: #4A5568;
+    background: #4a5568;
+  }
+
+  .pagination-container {
+    @apply flex justify-center;
+  }
+
+  .pagination {
+    @apply flex gap-x-3;
+  }
+
+  .pagination li a{
+    @apply w-10 h-10 md:w-14 md:h-14 text-xs md:text-base select-none rounded-full flex justify-center items-center bg-indigo-300 hover:bg-indigo-400 transition duration-200;
+  }
+
+  .pagination li.active a{
+    @apply bg-indigo-600 text-white border-0;
   }
 
   .hamburger {
