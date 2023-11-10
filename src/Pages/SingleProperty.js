@@ -29,7 +29,7 @@ export default function SingleProperty() {
     
 
     useEffect(()=> {
-        axios.get(`http://localhost:5000/estates/${propertyID}`).then((res)=> {
+        axios.get(`https://realestate-restful-api.vercel.app/estates/${propertyID}`).then((res)=> {
             setProperty(res.data)
         })
     }, [])
