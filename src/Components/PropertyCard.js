@@ -15,7 +15,7 @@ export default function PropertyCard({estate}) {
             <span className="bg-teal-200 text-teal-800 text-xs font-semibold py-[2px] px-2 rounded-full mr-2">PLUS</span>
             <div><span>{estate.bedrooms} Beds</span> • <span> {estate.bathrooms} Baths</span></div>
           </div>
-          <h4 className="lg:text-lg font-medium text-coolgray-900">{estate.address}</h4>
+          <h4 className="lg:text-lg font-medium text-coolgray-900 min-h-[56px]">{estate.address}</h4>
           <p className="my-3">
             <span className="lg:text-lg font-medium text-indigo-500">$ {estate.price}</span>
           </p>
