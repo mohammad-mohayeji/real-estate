@@ -6,17 +6,9 @@ import { MagnifyingGlassIcon, FunnelIcon,} from "../../node_modules/@heroicons/r
 import { GlobalContext } from "../GlobalContext";
 
 export default function Filterbar() {
-  const {filter, setFilter, setAmenities, amenities, updateHandler, searchHandler, searchInputValue,setSearchInputValue } = useContext(GlobalContext);
-  const amenitiesChangeHandler = (e)=> {
-    if(e.target.checked) {
-      setAmenities([...amenities, e.target.value])
-    } else {
-      setAmenities(amenities.filter((item)=> item !== e.target.value))
-    }
-  }
+  const {filter, setFilter, updateHandler, searchHandler, searchInputValue,setSearchInputValue } = useContext(GlobalContext);
 
   const [isOpen, setIsOpen] = useState(false);
-  const display = !isOpen ? "hidden" : "block";
 
   return (
     <div className="xl:hidden bg-coolgray-800">

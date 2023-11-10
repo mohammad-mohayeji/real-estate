@@ -23,6 +23,7 @@ export default function PropertiesList() {
     setCurrentPage,
     searchInputValue,
     searchHandler,
+    setLoading
   } = useContext(GlobalContext);
 
   useEffect(() => {
@@ -49,11 +50,11 @@ export default function PropertiesList() {
   };
 
   const fetchData = (pageNumber) => {
-    axios
-      .get(`https://realestate-restful-api.vercel.app/estates?_page=${pageNumber}&_limit=6`)
-      .then((res) => {
+    setLoading(true);
+    axios.get(`https://realestate-restful-api.vercel.app/estates?_page=${pageNumber}&_limit=6`).then((res) => {
         setProperties(res.data);
         setPageCount(Math.ceil(res.headers.get("x-total-count") / 6));
+        setLoading(false)
       });
   };
 

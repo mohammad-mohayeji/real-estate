@@ -3,7 +3,6 @@ import React, { createContext, useState } from "react";
 
 export const GlobalContext = createContext();
 export default function GlobalContextProvider({ children }) {
-  const [amenities, setAmenities] = useState([]);
   const [loading, setLoading] = useState(false);
   const [pageCount, setPageCount] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -30,7 +29,9 @@ export default function GlobalContextProvider({ children }) {
 
     if (keys.length === 0) {
       axios
-        .get(`https://realestate-restful-api.vercel.app/estates?_page=${pageNumber}&_limit=6`)
+        .get(
+          `https://realestate-restful-api.vercel.app/estates?_page=${pageNumber}&_limit=6`
+        )
         .then((res) => {
           setProperties(res.data);
           setLoading(false);
@@ -154,21 +155,19 @@ export default function GlobalContextProvider({ children }) {
     <GlobalContext.Provider
       value={{
         properties,
-        setProperties,
-        updateHandler,
         filter,
-        setFilter,
-        amenities,
         searchInputValue,
-        setAmenities,
-        loading,
         pageCount,
-        setPageCount,
         currentPage,
+        loading,
+        setProperties,
+        setFilter,
+        setSearchInputValue,
+        setPageCount,
         setCurrentPage,
         setLoading,
-        setSearchInputValue,
-        searchHandler
+        searchHandler,
+        updateHandler,
       }}
     >
       {children}
