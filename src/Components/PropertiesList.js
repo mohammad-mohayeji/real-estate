@@ -27,7 +27,6 @@ export default function PropertiesList() {
 
   useEffect(() => {
     if (searchInputValue) {
-      console.log("A");
       searchHandler(currentPage);
     } else if (!Object.keys(filter).length && !searchInputValue) {
       fetchData(currentPage);
@@ -51,7 +50,7 @@ export default function PropertiesList() {
 
   const fetchData = (pageNumber) => {
     axios
-      .get(`http://localhost:5000/estates?_page=${pageNumber}&_limit=6`)
+      .get(`https://realestate-restful-api.vercel.app/estates?_page=${pageNumber}&_limit=6`)
       .then((res) => {
         setProperties(res.data);
         setPageCount(Math.ceil(res.headers.get("x-total-count") / 6));
