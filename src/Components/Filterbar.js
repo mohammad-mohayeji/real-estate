@@ -79,7 +79,7 @@ export default function Filterbar() {
               <label className="text-coolgray-500 text-sm mb-1">
                 Price Range
               </label>
-              <select name="price" onChange={(e)=> (e)=> {
+              <select name="price" onChange={(e)=> {
                 if(e.target.value === 'Any') {
                   let {price, ...remainingObject} = filter;
                   setFilter(remainingObject);
