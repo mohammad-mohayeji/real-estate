@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { MagnifyingGlassIcon } from "../../node_modules/@heroicons/react/24/solid";
 import Filterbar from "./Filterbar";
 import { GlobalContext } from "../GlobalContext";
-import axios from "axios";
 
 export default function Navbar() {
   const {searchHandler, searchInputValue,setSearchInputValue} = useContext(GlobalContext)

@@ -23,17 +23,17 @@ export default function PropertiesList() {
     setCurrentPage,
     searchInputValue,
     searchHandler,
-    setLoading
+    setLoading,
   } = useContext(GlobalContext);
 
   useEffect(() => {
     if (searchInputValue) {
       searchHandler(currentPage);
+    } else if (Object.keys(filter).length && !searchInputValue) {
+      updateHandler(currentPage);
     } else if (!Object.keys(filter).length && !searchInputValue) {
       fetchData(currentPage);
-    } else if(Object.keys(filter).length && !searchInputValue) {
-      updateHandler(currentPage);
-    }
+    } 
   }, []);
 
   const handlePage = (data) => {
@@ -42,10 +42,10 @@ export default function PropertiesList() {
 
     if (searchInputValue) {
       searchHandler(pageNumber);
+    } else if (Object.keys(filter).length && !searchInputValue) {
+      updateHandler(pageNumber);
     } else if (!Object.keys(filter).length && !searchInputValue) {
       fetchData(pageNumber);
-    } else if(Object.keys(filter).length && !searchInputValue) {
-      updateHandler(pageNumber);
     }
   };
 
@@ -54,7 +54,7 @@ export default function PropertiesList() {
     axios.get(`https://realestate-restful-api.vercel.app/estates?_page=${pageNumber}&_limit=6`).then((res) => {
         setProperties(res.data);
         setPageCount(Math.ceil(res.headers.get("x-total-count") / 6));
-        setLoading(false)
+        setLoading(false);
       });
   };
 
@@ -93,8 +93,7 @@ export default function PropertiesList() {
           ))}
         </div>
         <div className="pagination-container">
-          <ReactPaginate
-            pageCount={pageCount}
+          <ReactPaginate pageCount={pageCount}
             containerClassName="pagination"
             pageClassName="page-item"
             previousClassName="prev-page"

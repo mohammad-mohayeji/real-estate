@@ -5,10 +5,14 @@ import { MagnifyingGlassIcon, FunnelIcon,} from "../../node_modules/@heroicons/r
 // import our context
 import { GlobalContext } from "../GlobalContext";
 
+let renderCount = 0;
+
 export default function Filterbar() {
   const {filter, setFilter, updateHandler, searchHandler, searchInputValue,setSearchInputValue } = useContext(GlobalContext);
-
   const [isOpen, setIsOpen] = useState(false);
+
+  renderCount++;
+  console.log(renderCount);
 
   return (
     <div className="xl:hidden bg-coolgray-800">
@@ -44,12 +48,12 @@ export default function Filterbar() {
                 }
               }} className="form-select bg-coolgray-700 text-white rounded-lg border-none focus:ring-0">
                 <option value="Any" selected={!filter.hasOwnProperty("bedrooms")}>Any</option>
-                <option value="1" selected={filter.bedrooms == "1"}>1</option>
-                <option value="2" selected={filter.bedrooms == "2"}>2</option>
-                <option value="3" selected={filter.bedrooms == "3"}>3</option>
-                <option value="4" selected={filter.bedrooms == "4"}>4</option>
-                <option value="5" selected={filter.bedrooms == "5"}>5</option>
-                <option value="6" selected={filter.bedrooms == "6"}>6</option>
+                <option value="1" selected={filter.bedrooms === "1"}>1</option>
+                <option value="2" selected={filter.bedrooms === "2"}>2</option>
+                <option value="3" selected={filter.bedrooms === "3"}>3</option>
+                <option value="4" selected={filter.bedrooms === "4"}>4</option>
+                <option value="5" selected={filter.bedrooms === "5"}>5</option>
+                <option value="6" selected={filter.bedrooms === "6"}>6</option>
               </select>
             </div>
 
@@ -66,12 +70,12 @@ export default function Filterbar() {
                 }
               }} className="form-select bg-coolgray-700 text-white rounded-lg border-none focus:ring-0">
                 <option value="Any" selected={!filter.hasOwnProperty("bathrooms")}>Any</option>
-                <option value="1" selected={filter.bathrooms == "1"}>1</option>
-                <option value="2" selected={filter.bathrooms == "2"}>2</option>
-                <option value="3" selected={filter.bathrooms == "3"}>3</option>
-                <option value="4" selected={filter.bathrooms == "4"}>4</option>
-                <option value="5" selected={filter.bathrooms == "5"}>5</option>
-                <option value="6" selected={filter.bathrooms == "6"}>6</option>
+                <option value="1" selected={filter.bathrooms === "1"}>1</option>
+                <option value="2" selected={filter.bathrooms === "2"}>2</option>
+                <option value="3" selected={filter.bathrooms === "3"}>3</option>
+                <option value="4" selected={filter.bathrooms === "4"}>4</option>
+                <option value="5" selected={filter.bathrooms === "5"}>5</option>
+                <option value="6" selected={filter.bathrooms === "6"}>6</option>
               </select>
             </div>
 
@@ -88,11 +92,11 @@ export default function Filterbar() {
                 }
               }} className="form-select bg-coolgray-700 text-white rounded-lg border-none focus:ring-0">
                 <option value="Any" selected={!filter.hasOwnProperty("price")}>Any</option>
-                <option value="10000 - 20000" selected={filter.price == "10000 - 20000"}>10000 - 20000</option>
-                <option value="20000 - 30000" selected={filter.price == "20000 - 30000"}>20000 - 30000</option>
-                <option value="30000 - 40000" selected={filter.price == "30000 - 40000"}>30000 - 40000</option>
-                <option value="40000 - 50000" selected={filter.price == "40000 - 50000"}>40000 - 50000</option>
-                <option value="50000 - 60000" selected={filter.price == "50000 - 60000"}>50000 - 60000</option>
+                <option value="10000 - 20000" selected={filter.price === "10000 - 20000"}>10000 - 20000</option>
+                <option value="20000 - 30000" selected={filter.price === "20000 - 30000"}>20000 - 30000</option>
+                <option value="30000 - 40000" selected={filter.price === "30000 - 40000"}>30000 - 40000</option>
+                <option value="40000 - 50000" selected={filter.price === "40000 - 50000"}>40000 - 50000</option>
+                <option value="50000 - 60000" selected={filter.price === "50000 - 60000"}>50000 - 60000</option>
               </select>
             </div>
           </div>
@@ -125,7 +129,7 @@ export default function Filterbar() {
           </div>
         </div>
         <div className={`${!isOpen ? 'opacity-0 invisible' : 'opacity-100 visible'} transition-all duration-400 delay-100 bg-coolgray-900 p-5 w-full`}>
-          <button onClick={updateHandler} className="bg-indigo-500 w-full sm:w-auto text-white font-medium p-2 px-4 rounded-lg">
+          <button onClick={(e)=> updateHandler(1)} className="bg-indigo-500 w-full sm:w-auto text-white font-medium p-2 px-4 rounded-lg">
             Update results
           </button>
         </div>

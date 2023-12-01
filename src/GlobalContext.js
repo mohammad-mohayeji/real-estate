@@ -28,11 +28,7 @@ export default function GlobalContextProvider({ children }) {
     }
 
     if (keys.length === 0) {
-      axios
-        .get(
-          `https://realestate-restful-api.vercel.app/estates?_page=${pageNumber}&_limit=6`
-        )
-        .then((res) => {
+      axios.get(`https://realestate-restful-api.vercel.app/estates?_page=${pageNumber}&_limit=6`).then((res) => {
           setProperties(res.data);
           setLoading(false);
           setPageCount(Math.ceil(res.headers.get("x-total-count") / 6));
@@ -40,22 +36,14 @@ export default function GlobalContextProvider({ children }) {
     } else if (keys.length === 1) {
       let key = keys[0];
 
-      if (key == "price") {
-        axios
-          .get(
-            `https://realestate-restful-api.vercel.app/estates?_page=${pageNumber}&_limit=6&price_gte=${minPrice}&price_lte=${maxPrice}`
-          )
-          .then((res) => {
+      if (key === "price") {
+        axios.get(`https://realestate-restful-api.vercel.app/estates?_page=${pageNumber}&_limit=6&price_gte=${minPrice}&price_lte=${maxPrice}`).then((res) => {
             setProperties(res.data);
             setLoading(false);
             setPageCount(Math.ceil(res.headers.get("x-total-count") / 6));
           });
       } else {
-        axios
-          .get(
-            `https://realestate-restful-api.vercel.app/estates?_page=${pageNumber}&_limit=6&${key}=${filter[key]}`
-          )
-          .then((res) => {
+        axios.get(`https://realestate-restful-api.vercel.app/estates?_page=${pageNumber}&_limit=6&${key}=${filter[key]}`).then((res) => {
             setProperties(res.data);
             setLoading(false);
             setPageCount(Math.ceil(res.headers.get("x-total-count") / 6));
@@ -65,22 +53,14 @@ export default function GlobalContextProvider({ children }) {
       let key1 = keys[0];
       let key2 = keys[1];
 
-      if (key2 == "price") {
-        axios
-          .get(
-            `https://realestate-restful-api.vercel.app/estates?_page=${pageNumber}&_limit=6&price_gte=${minPrice}&price_lte=${maxPrice}&${key1}=${filter[key1]}`
-          )
-          .then((res) => {
+      if (key2 === "price") {
+        axios.get(`https://realestate-restful-api.vercel.app/estates?_page=${pageNumber}&_limit=6&price_gte=${minPrice}&price_lte=${maxPrice}&${key1}=${filter[key1]}`).then((res) => {
             setProperties(res.data);
             setLoading(false);
             setPageCount(Math.ceil(res.headers.get("x-total-count") / 6));
           });
       } else {
-        axios
-          .get(
-            `https://realestate-restful-api.vercel.app/estates?_page=${pageNumber}&_limit=6&${key1}=${filter[key1]}&${key2}=${filter[key2]}`
-          )
-          .then((res) => {
+        axios.get(`https://realestate-restful-api.vercel.app/estates?_page=${pageNumber}&_limit=6&${key1}=${filter[key1]}&${key2}=${filter[key2]}`).then((res) => {
             setProperties(res.data);
             setLoading(false);
             setPageCount(Math.ceil(res.headers.get("x-total-count") / 6));
@@ -91,22 +71,14 @@ export default function GlobalContextProvider({ children }) {
       let key2 = keys[1];
       let key3 = keys[2];
 
-      if (key3 == "price") {
-        axios
-          .get(
-            `https://realestate-restful-api.vercel.app/estates?_page=${pageNumber}&_limit=6&price_gte=${minPrice}&price_lte=${maxPrice}&${key1}=${filter[key1]}&${key2}=${filter[key2]}`
-          )
-          .then((res) => {
+      if (key3 === "price") {
+        axios.get(`https://realestate-restful-api.vercel.app/estates?_page=${pageNumber}&_limit=6&price_gte=${minPrice}&price_lte=${maxPrice}&${key1}=${filter[key1]}&${key2}=${filter[key2]}`).then((res) => {
             setProperties(res.data);
             setLoading(false);
             setPageCount(Math.ceil(res.headers.get("x-total-count") / 6));
           });
       } else {
-        axios
-          .get(
-            `https://realestate-restful-api.vercel.app/estates?_page=${pageNumber}&_limit=6&${key1}=${filter[key1]}&${key2}=${filter[key2]}&${key3}=${filter[key3]}`
-          )
-          .then((res) => {
+        axios.get(`https://realestate-restful-api.vercel.app/estates?_page=${pageNumber}&_limit=6&${key1}=${filter[key1]}&${key2}=${filter[key2]}&${key3}=${filter[key3]}`).then((res) => {
             setProperties(res.data);
             setLoading(false);
             setPageCount(Math.ceil(res.headers.get("x-total-count") / 6));
@@ -118,22 +90,14 @@ export default function GlobalContextProvider({ children }) {
       let key3 = keys[2];
       let key4 = keys[3];
 
-      if (key4 == "price") {
-        axios
-          .get(
-            `https://realestate-restful-api.vercel.app/estates?_page=${pageNumber}&_limit=6&price_gte=${minPrice}&price_lte=${maxPrice}&${key1}=${filter[key1]}&${key2}=${filter[key2]}&${key3}=${filter[key3]}`
-          )
-          .then((res) => {
+      if (key4 === "price") {
+        axios.get(`https://realestate-restful-api.vercel.app/estates?_page=${pageNumber}&_limit=6&price_gte=${minPrice}&price_lte=${maxPrice}&${key1}=${filter[key1]}&${key2}=${filter[key2]}&${key3}=${filter[key3]}`).then((res) => {
             setProperties(res.data);
             setLoading(false);
             setPageCount(Math.ceil(res.headers.get("x-total-count") / 6));
           });
       } else {
-        axios
-          .get(
-            `https://realestate-restful-api.vercel.app/estates?_page=${pageNumber}&_limit=6&${key1}=${filter[key1]}&${key2}=${filter[key2]}&${key3}=${filter[key3]}&${key4}=${filter[key4]}`
-          )
-          .then((res) => {
+        axios.get(`https://realestate-restful-api.vercel.app/estates?_page=${pageNumber}&_limit=6&${key1}=${filter[key1]}&${key2}=${filter[key2]}&${key3}=${filter[key3]}&${key4}=${filter[key4]}`).then((res) => {
             setProperties(res.data);
             setLoading(false);
             setPageCount(Math.ceil(res.headers.get("x-total-count") / 6));

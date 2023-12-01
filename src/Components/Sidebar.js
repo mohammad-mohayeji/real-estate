@@ -1,19 +1,11 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext } from "react";
 
 // import our GlobalContext
 import { GlobalContext } from "../GlobalContext";
 import { Link } from "react-router-dom";
-import { flushSync } from "react-dom";
 
 export default function Sidebar() {
-  const { filter, setFilter, setAmenities, amenities, updateHandler } = useContext(GlobalContext);
-  const amenitiesChangeHandler = (e)=> {
-    if(e.target.checked) {
-      setAmenities([...amenities, e.target.value])
-    } else {
-      setAmenities(amenities.filter((item)=> item !== e.target.value))
-    }
-  }
+  const { filter, setFilter, updateHandler } = useContext(GlobalContext);
 
 
   return (
@@ -37,12 +29,12 @@ export default function Sidebar() {
                 }
               }} className="form-select bg-coolgray-700 text-white rounded-lg border-none focus:ring-0">
                 <option selected={!filter.hasOwnProperty("bedrooms")} value="Any">Any</option>
-                <option selected={filter.bedrooms == '1'} value="1">1</option>
-                <option selected={filter.bedrooms == '2'} value="2">2</option>
-                <option selected={filter.bedrooms == '3'} value="3">3</option>
-                <option selected={filter.bedrooms == '4'} value="4">4</option>
-                <option selected={filter.bedrooms == '5'} value="5">5</option>
-                <option selected={filter.bedrooms == '6'} value="6">6</option>
+                <option selected={filter.bedrooms === '1'} value="1">1</option>
+                <option selected={filter.bedrooms === '2'} value="2">2</option>
+                <option selected={filter.bedrooms === '3'} value="3">3</option>
+                <option selected={filter.bedrooms === '4'} value="4">4</option>
+                <option selected={filter.bedrooms === '5'} value="5">5</option>
+                <option selected={filter.bedrooms === '6'} value="6">6</option>
               </select>
             </div>
 
@@ -59,12 +51,12 @@ export default function Sidebar() {
                 }
               }} className="form-select bg-coolgray-700 text-white rounded-lg border-none focus:ring-0">
                 <option selected={!filter.hasOwnProperty("bathrooms")} value="Any">Any</option>
-                <option selected={filter.bathrooms == "1"} value="1">1</option>
-                <option selected={filter.bathrooms == "2"} value="2">2</option>
-                <option selected={filter.bathrooms == "3"} value="3">3</option>
-                <option selected={filter.bathrooms == "4"} value="4">4</option>
-                <option selected={filter.bathrooms == "5"} value="5">5</option>
-                <option selected={filter.bathrooms == "6"} value="6">6</option>
+                <option selected={filter.bathrooms === "1"} value="1">1</option>
+                <option selected={filter.bathrooms === "2"} value="2">2</option>
+                <option selected={filter.bathrooms === "3"} value="3">3</option>
+                <option selected={filter.bathrooms === "4"} value="4">4</option>
+                <option selected={filter.bathrooms === "5"} value="5">5</option>
+                <option selected={filter.bathrooms === "6"} value="6">6</option>
               </select>
             </div>
 
@@ -81,11 +73,11 @@ export default function Sidebar() {
                 }
               }} className="form-select bg-coolgray-700 text-white rounded-lg border-none focus:ring-0">
                 <option selected={!filter.hasOwnProperty('price')} value="Any">Any</option>
-                <option selected={filter.price == "10000 - 20000"} value="10000 - 20000">10000 - 20000</option>
-                <option selected={filter.price == "20000 - 30000"} value="20000 - 30000">20000 - 30000</option>
-                <option selected={filter.price == "30000 - 40000"} value="30000 - 40000">30000 - 40000</option>
-                <option selected={filter.price == "40000 - 50000"} value="40000 - 50000">40000 - 50000</option>
-                <option selected={filter.price == "50000 - 60000"} value="50000 - 60000">50000 - 60000</option>
+                <option selected={filter.price === "10000 - 20000"} value="10000 - 20000">10000 - 20000</option>
+                <option selected={filter.price === "20000 - 30000"} value="20000 - 30000">20000 - 30000</option>
+                <option selected={filter.price === "30000 - 40000"} value="30000 - 40000">30000 - 40000</option>
+                <option selected={filter.price === "40000 - 50000"} value="40000 - 50000">40000 - 50000</option>
+                <option selected={filter.price === "50000 - 60000"} value="50000 - 60000">50000 - 60000</option>
               </select>
             </div>
           </div>
